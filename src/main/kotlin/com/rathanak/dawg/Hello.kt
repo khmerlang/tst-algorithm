@@ -1,11 +1,9 @@
 package com.rathanak.dawg
 
+import java.io.File
+
 fun main() {
     println("Hello")
-    var tst = TST()
-    tst.put("hello", 1)
-    tst.put("how", 2)
-
-    println("hello: " + tst.get("hello").toString())
-    println("hell: " + tst.get("hell").toString())
+    var spellCorrector = SpellCorrector()
+    println(spellCorrector.correct("hi"))
 }

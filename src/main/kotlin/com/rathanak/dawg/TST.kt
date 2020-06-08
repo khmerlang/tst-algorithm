@@ -3,50 +3,63 @@ package com.rathanak.dawg
 class TST {
     var root: Node? = null
 
-    fun put(key: String, value: Int) {
-        root = addNode(root, key, value, 0)
+    fun insert(key: String, freq: String) {
+        root = addNode(root, key, freq, 0)
     }
 
-    fun get(key: String): Int {
-        val tmp = getNode(root, key, 0) ?: return 0
-
-        return tmp.value
+    fun isWord(key: String): Boolean {
+        return search(root, key, 0)
     }
 
-    private fun getNode(x: Node?, key: String, d: Int): Node? {
-        if(x == null) {
-            return null
+
+    fun search(node: Node?, word: String, pos: Int): Boolean {
+        var tmpNode = node
+        var tmpPos = pos
+        while (tmpNode != null) {
+            if (word[tmpPos] < tmpNode.ch) {
+                tmpNode = tmpNode.left
+            } else if (word[tmpPos] > tmpNode.ch) {
+                tmpNode = tmpNode.right
+            } else {
+                if (tmpNode.isEnd && tmpPos == word.length - 1) {
+                    return true
+                }
+
+                tmpPos++
+                tmpNode = tmpNode.mid
+            }
         }
-        val ch = key[d]
 
-        return if (ch < x.ch) {
-            getNode(x.left, key, d)
-        } else if (ch > x.ch) {
-            getNode(x.right, key, d)
-        } else if (d < key.length - 1) {
-            getNode(x.mid, key, d+1)
+        return false
+    }
+
+    private fun addNode(node: Node?, word: String, freq: String, pos: Int ): Node? {
+        var nodeRoot = node
+        val ch = word[pos]
+        if(nodeRoot == null) {
+            if (word.length <= pos) {
+                return node
+            }
+            nodeRoot = Node()
+            nodeRoot.ch = ch
+            if(pos + 1 == word.length) {
+                nodeRoot.isEnd = true
+                nodeRoot.frequency = freq
+                return nodeRoot
+            }
+        }
+
+        if(ch < nodeRoot.ch) {
+            nodeRoot.left = addNode(nodeRoot.left, word, freq, pos)
+        } else if(ch > nodeRoot.ch) {
+            nodeRoot.right = addNode(nodeRoot.right, word, freq, pos)
+        } else if(pos < word.length -1) {
+            nodeRoot.mid = addNode(nodeRoot.mid, word, freq, pos+1)
         } else {
-            x
-        }
-    }
-
-    private fun addNode(x: Node?, key: String, value: Int, d: Int ): Node? {
-        var tmpRoot = x
-        val ch = key[d]
-        if(tmpRoot == null) {
-            tmpRoot = Node()
-            tmpRoot.ch = ch
-        }
-        if(ch < tmpRoot.ch) {
-            tmpRoot.left = addNode(tmpRoot.left, key, value, d)
-        } else if(ch > tmpRoot.ch) {
-            tmpRoot.right = addNode(tmpRoot.right, key, value, d)
-        } else if(d < key.length -1) {
-            tmpRoot.mid = addNode(tmpRoot.mid, key, value, d+1)
-        } else {
-            tmpRoot.value = value
+            nodeRoot.isEnd = true
+            nodeRoot.frequency = freq
         }
 
-        return tmpRoot
+        return nodeRoot
     }
 }
