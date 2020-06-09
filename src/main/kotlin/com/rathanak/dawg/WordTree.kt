@@ -4,7 +4,8 @@ import java.io.File
 
 class WordTree {
     fun createNode(tst: TST): Node? {
-        val filePath = object {}.javaClass.getResource("/count_1w.txt").path
+//        val filePath = object {}.javaClass.getResource("/count_1w.txt").path
+        val filePath = object {}.javaClass.getResource("/words.txt").path
         File(filePath).useLines { lines ->
             lines.forEach {
                 val token = it.split("\\s".toRegex())

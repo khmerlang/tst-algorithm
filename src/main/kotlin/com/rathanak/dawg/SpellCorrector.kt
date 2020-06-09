@@ -30,8 +30,10 @@ class SpellCorrector {
         var i = 0
         while (!suggestedWords.isEmpty() && i < SUGGESTED_WORD_LIST_LIMIT) {
             val element = suggestedWords.poll()
-            outputMap[element.word] = element.editDistance
-            i++
+            if (getEditDistance(str, element.word) <= EDIT_LIMIT) {
+                outputMap[element.word] = element.editDistance
+                i++
+            }
         }
         return outputMap
     }
